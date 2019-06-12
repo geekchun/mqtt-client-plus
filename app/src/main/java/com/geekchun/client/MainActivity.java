@@ -76,8 +76,15 @@ public class MainActivity extends AppCompatActivity {
                 {
                     case "humidity":humidity.setText("当前湿度:"+message.toString()+" %RH");break;
                     case "temperature":temperature.setText("当前温度:"+message.toString()+"℃");break;
-                    case "anquan":if(message.toString().equals("1"))
-                    {anquan.setText("当前家中安全");imageView.setImageResource(R.drawable.s);}else {anquan.setText("家中有人入侵");imageView.setImageResource(R.drawable.ns);}break;
+                    case "anquan":
+                        if(message.toString().equals("1"))
+                          {
+                             anquan.setText("当前家中安全");imageView.setImageResource(R.drawable.s);
+                          }
+                        else {
+                            anquan.setText("家中有人入侵");
+                            imageView.setImageResource(R.drawable.ns);
+                        }break;
                     default:break;
                 }
             }
