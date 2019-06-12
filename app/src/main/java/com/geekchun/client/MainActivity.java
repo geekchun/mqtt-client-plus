@@ -1,9 +1,12 @@
 package com.geekchun.client;
 
+import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -22,16 +25,26 @@ public class MainActivity extends AppCompatActivity {
     //连接选项
     private MqttConnectOptions options;
     private Button button;
+    private TextView temperature;
+    private TextView humidity;
+    private  TextView anquan;
+    private ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         client_init();//注意：这里不能调用订阅和发布的相关方法，会导致闪退
         button=(Button)findViewById(R.id.button);
+        temperature=(TextView)findViewById(R.id.temperature);
+        humidity=(TextView)findViewById(R.id.humidity);
+        anquan=(TextView)findViewById(R.id.anquan);
+        imageView=(ImageView)findViewById(R.id.image);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                subscribe("geekchun");//暂时只能在其他函数内调用发布订阅的相关函数，才学尚浅，暂时无解
+                subscribe("temperature");//暂时只能在其他函数内调用发布订阅的相关函数，才学尚浅，暂时无解
+                subscribe("humidity");
+                subscribe("anquan");
             }
         });
     }
@@ -55,9 +68,18 @@ public class MainActivity extends AppCompatActivity {
                 //连接丢失的回调函数
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 //收到消息的回调函数
+                switch (topic)
+                {
+                    case "humidity":humidity.setText("当前湿度:"+message.toString()+" %RH");break;
+                    case "temperature":temperature.setText("当前温度:"+message.toString()+"℃");break;
+                    case "anquan":if(message.toString().equals("1"))
+                    {anquan.setText("当前家中安全");imageView.setImageResource(R.drawable.s);}else {anquan.setText("家中有人入侵");imageView.setImageResource(R.drawable.ns);}break;
+                    default:break;
+                }
             }
 
             @Override

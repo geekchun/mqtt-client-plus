@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">client</string>
     <string name="button">Button</string>
+    <string name="connect">connect</string>
+    <string name="t">当前温度:</string>
+    <string name="h">当前湿度:</string>
 </resources>
